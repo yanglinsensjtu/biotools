@@ -20,7 +20,7 @@ changeIRanges <- function(granges.obj = granges.obj, upstream = integer, width =
             mcols(granges.obj))
   }
 }
-getSeqFgenome <- function(seqstr = sequence,title = title, ...){
+getSeqFgenome <- function(seqstr = sequence, title = NA,...){
   seqstr <- seqstr
   seq <- DNAString(seqstr)
   chr.name <- seqnames(BS.hg19)
@@ -69,7 +69,7 @@ getSeqFgenome <- function(seqstr = sequence,title = title, ...){
                                  ' ',
                                  location.c@ranges@start,
                                  '-',
-                                 (location.c@ranges@width + location.c@ranges@start -1 ))
+                                 (location.c@ranges@width + location.c@ranges@start ))
       print(paste0('The query sequence is anti-sense strand according to the BS.hg19 Genome ',chr.name[i]))
       break()
     }else{
@@ -78,19 +78,20 @@ getSeqFgenome <- function(seqstr = sequence,title = title, ...){
   }
 
   if (!is.na(Flank.seq)) {
-
-    writeXStringSet(Flank.seq, filepath = paste0(title,'.fasta'))
+    if (!is.na(title)) {
+      writeXStringSet(Flank.seq, filepath = paste0(title,'.fasta'))
+    }
     return(Flank.seq)
   }else{
     return(NA)
   }
 
 }
-s.seq <- 'TCCTGGTGCTCCCACAAAGG'
-a <- getSeqFgenome(s.seq, title = 'C2 upstream',upstream = 0, width = 20)
+s.seq <- 'TCCTGGTGCTCCCACAAAGGAGAAGGGCTGATCACTCAAAGTTGCGAACACCAAGCTCAACAATGAGCCCTGGAAAATTTCTGGAATGGATTATTAAACA'
+a <- getSeqFgenome(s.seq, title = 'chr1', upstream = 0, width = 20)
 
-s.seq.r <- 'CTCTGGCCTCACTGGCGTCTGTGCCCAGTG'
-b <- getSeqFgenome(s.seq.r, title = 'C2 upstream',upstream = 0, width = 30)
+s.seq.r <- 'GTCCCGGTTCCGCCTCCCCACTCCTGCGTCTTCCCGCCCCTGCCGGGTTCTGGGAAGCCTCGCGCGGCTCTTCCGCAGCTGCTGCCCGCCCGGAGCTCCT'
+b <- getSeqFgenome(s.seq.r, title = 'chr1.1',upstream = 0, width = 30)
 setequal(toString(a), s.seq)
 setequal(toString(b), s.seq.r)
 
