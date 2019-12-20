@@ -49,7 +49,7 @@ getSeqFgenome <- function(seqstr = sequence,title = title, ...){
       rangesr <- mtpr@ranges
       strand <- '-'
       location <- GRanges(seqnames = chr.name[i],
-                          ranges = ranges,
+                          ranges = rangesr,
                           strand = strand)
 
       location.c <- changeIRanges(location, ...)
