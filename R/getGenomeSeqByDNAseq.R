@@ -6,14 +6,14 @@ BS.hg19 <- BSgenome.Hsapiens.UCSC.hg19
 changeIRanges <- function(granges.obj = granges.obj, upstream = integer, width = integer){
   if (as.character(granges.obj@strand) == '-') {
     GRanges(seqnames = granges.obj@seqnames,
-            IRanges(end = end(granges.obj@ranges) + upstream - 1, 
+            IRanges(end = end(granges.obj@ranges) + upstream - 1,
                     start = end(granges.obj@ranges) + upstream - width),
             strand = granges.obj@strand,
             seqinfo = granges.obj@seqinfo,
             mcols(granges.obj))
   }else{
     GRanges(seqnames = granges.obj@seqnames,
-            IRanges(start = start(granges.obj@ranges) - upstream + 1, 
+            IRanges(start = start(granges.obj@ranges) - upstream + 1,
                     width = width),
             strand = granges.obj@strand,
             seqinfo = granges.obj@seqinfo,
@@ -41,10 +41,10 @@ getSeqFgenome <- function(seqstr = sequence,title = title, ...){
       Flank.seq <- getSeq(BS.hg19, location.c)
       names(Flank.seq) <- paste0(title,
                                  ' ',
-                                 location.c@seqnames, 
+                                 location.c@seqnames,
                                  ' ',
-                                 location.c@strand, 
-                                 ':', 
+                                 location.c@strand,
+                                 ':',
                                  ' ',
                                  location.c@ranges@start,
                                  '-',
@@ -57,15 +57,15 @@ getSeqFgenome <- function(seqstr = sequence,title = title, ...){
       location <- GRanges(seqnames = chr.name[i],
                           ranges = rangesr,
                           strand = strand)
-      
+
       location.c <- changeIRanges(location, ...)
       Flank.seq <- getSeq(BS.hg19, location.c)
       names(Flank.seq) <- paste0(title,
                                  ' ',
-                                 location.c@seqnames, 
+                                 location.c@seqnames,
                                  ' ',
-                                 location.c@strand, 
-                                 ':', 
+                                 location.c@strand,
+                                 ':',
                                  ' ',
                                  location.c@ranges@start,
                                  '-',
@@ -76,17 +76,17 @@ getSeqFgenome <- function(seqstr = sequence,title = title, ...){
       print(paste0('Not found any location match the sequence in ',chr.name[i]))
     }
   }
-  
+
   if (!is.na(Flank.seq)) {
-    
+
     writeXStringSet(Flank.seq, filepath = paste0(title,'.fasta'))
     return(Flank.seq)
   }else{
     return(NA)
   }
-  
+
 }
 
-getSeqFgenome('ccttccagctcttctggctggggctgcactgcttgcgggctgccc', title = 'CD52 upstream',upstream = 500, width = 500) 
+getSeqFgenome('ccttccagctcttctggctggggctgcactgcttgcgggctgccc', title = 'C2 upstream',upstream = 500, width = 500)
 
 
