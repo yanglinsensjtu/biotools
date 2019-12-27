@@ -20,13 +20,13 @@ changeIRanges <- function(granges.obj = granges.obj, upstream = integer, width =
             mcols(granges.obj))
   }
 }
-getSeqFgenome <- function(seqstr = sequence, 
-                          title = NA, 
-                          chrMatch = NA, 
-                          upstream = 0, 
+getSeqFgenome <- function(seqstr = sequence,
+                          title = NA,
+                          chrMatch = NA,
+                          upstream = 0,
                           width = NA,
                           ...){
-  
+
   seqstr <- seqstr
   if (is.na(width)) {
     width <- nchar(seqstr)
@@ -59,7 +59,7 @@ getSeqFgenome <- function(seqstr = sequence,
                                    location.c@ranges@start,
                                    '-',
                                    (location.c@ranges@width + location.c@ranges@start -1 ))
-        print(paste0('The query sequence is sense strand according to the Genome ',chr.name[i]))
+        print(paste0('The query sequence is sense strand according to the BS.hg19 Genome ',chr.name[i]))
         #break()
       }else if(length(mtpr)!=0){
         rangesr <- mtpr@ranges
@@ -67,7 +67,7 @@ getSeqFgenome <- function(seqstr = sequence,
         location <- GRanges(seqnames = chr.name[i],
                             ranges = rangesr,
                             strand = strand)
-        
+
         location.c <- changeIRanges(location, upstream, width)
         Flank.seq <- getSeq(BS.hg19, location.c)
         names(Flank.seq) <- paste0(title,
@@ -79,7 +79,7 @@ getSeqFgenome <- function(seqstr = sequence,
                                    ' ',
                                    location.c@ranges@start,
                                    '-',
-                                   (location.c@ranges@width + location.c@ranges@start ))
+                                   (location.c@ranges@width + location.c@ranges@start -1))
         print(paste0('The query sequence is anti-sense strand according to the BS.hg19 Genome ',chr.name[i]))
         #break()
       }else{
@@ -109,14 +109,14 @@ getSeqFgenome <- function(seqstr = sequence,
                                  location.c@ranges@start,
                                  '-',
                                  (location.c@ranges@width + location.c@ranges@start -1 ))
-      print(paste0('The query sequence is sense strand according to the Genome ',chrMatch))
+      print(paste0('The query sequence is sense strand according to the BS.hg19 Genome ',chrMatch))
     }else if(length(mtpr)!=0){
       rangesr <- mtpr@ranges
       strand <- '-'
       location <- GRanges(seqnames = chrMatch,
                           ranges = rangesr,
                           strand = strand)
-      
+
       location.c <- changeIRanges(location, upstream, width)
       Flank.seq <- getSeq(BS.hg19, location.c)
       names(Flank.seq) <- paste0(title,
@@ -128,13 +128,13 @@ getSeqFgenome <- function(seqstr = sequence,
                                  ' ',
                                  location.c@ranges@start,
                                  '-',
-                                 (location.c@ranges@width + location.c@ranges@start ))
+                                 (location.c@ranges@width + location.c@ranges@start -1))
       print(paste0('The query sequence is anti-sense strand according to the BS.hg19 Genome ',chrMatch))
     }else{
       print(paste0('Not found any location match the sequence in ',chrMatch))
     }
   }
-  
+
 
   if (!is.na(Flank.seq)) {
     if (!is.na(title)) {
@@ -149,6 +149,22 @@ getSeqFgenome <- function(seqstr = sequence,
 
 
 
-s.seq <- "GGAGGAAAAACTGTTTCATACAGAAGGCGT"
+s.seq <- ""
 
-getSeqFgenome(s.seq)
+s.seqr <- reverseComplement(DNAString(s.seq))
+#
+getSeqFgenome(s.seq, title = 'CD52s' ,upstream = 500, width = 1000 )
+
+getSeqFgenome(s.seqr, title = 'CD52r' ,upstream = 500, width = 1000 )
+
+
+
+
+
+
+
+
+
+
+
+
